@@ -9,12 +9,13 @@ class EmailStreamingAlarmListenerTest extends FunSuite {
   private val conf = new SparkConf(true)
     .setMaster("local[2]")
     .setAppName("smilodon")
-    .set(HOSTNAME, "corp.netease.com")
-    .set(FROM, "hzyaoqin@corp.netease.com")
+    .set(HOSTNAME, "smtp-mail.outlook.com")
+    .set(SMTP_PORT, "587")
+    .set(FROM, "yaooqinn@hotmail.com")
     .set(SSL_ON_CONNECT, "true")
     .set(USERNAME, "hzyaoqin")
     .set(PASSWORD, "***")
-    .set(TO, "hzyaoqin@corp.netease.com")
+    .set(TO, "yaooqinn@hotmail.com")
 
 
   ignore("on application end") {

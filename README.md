@@ -1,4 +1,4 @@
-# Spark-Alarm  [![Build Status](https://travis-ci.com/yaooqinn/spark-alarm.svg?branch=master)](https://travis-ci.org/yaooqinn/spark-alarm)[![HitCount](http://hits.dwyl.io/yaooqinn/spark-alarm.svg)](http://hits.dwyl.io/yaooqinn/spark-alarm)
+# Spark-Alarm  [![Build Status](https://travis-ci.com/yaooqinn/spark-alarm.svg?branch=master)](https://travis-ci.com/yaooqinn/spark-alarm)[![HitCount](http://hits.dwyl.io/yaooqinn/spark-alarm.svg)](http://hits.dwyl.io/yaooqinn/spark-alarm)
 
 
 ## 项目简介
@@ -44,13 +44,13 @@ git https://github.com/yaooqinn/spark-alarm.git
 | spark.alarm.email.from | <空值> | 发信邮箱 |
 | spark.alarm.email.to | <空值> | 收信邮箱列表，用逗号分隔 |
 
-参见: alarm-email/src/test/scala/com/netease/spark/alarm/email/EmailAlarmistTest.scala
+参见: https://github.com/yaooqinn/spark-alarm/blob/master/alarm-email/src/test/scala/com/netease/spark/alarm/email/EmailAlarmistTest.scala
 
 ### 配置哨兵报警
 
 | 配置 | 默认值 | 说明 |
 | ------ | ------ | ------ |
-| spark.alarm.sentry.url | http://alarm.netease.com/api/send | 哨兵服务地址 |
+| spark.alarm.sentry.url | <空值> | 哨兵服务地址 |
 | spark.alarm.sentry.api.type | Stone | 哨兵服务通知到的终端类型 /** 泡泡 */ POPO, /** 易信 */YiXin, /** 短信 */ SMS, /** 语音 */ Voice, Stone, /** 邮件 */ Email|
 | spark.alarm.sentry.app.name | <空值> | 哨兵服务的应用名称，若没有可以去哨兵官网添加 |
 | spark.alarm.sentry.app.secret | <空值> | 哨兵服务应用对应的密钥 |

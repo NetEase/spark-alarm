@@ -20,7 +20,7 @@ class SmilodonAlarmistTest extends FunSuite {
       "Spark 服务异常",
       "Spark 服务没什么异常",
       Seq(stone, popo).asJava,
-      List("hzyaoqin@corp.netease.com").asJava)
+      List("yaooqinn@hotmail.com").asJava)
 
     val alarmist = new SmilodonAlarmist(conf)
     val response = alarmist.alarm(msg)
@@ -28,7 +28,7 @@ class SmilodonAlarmistTest extends FunSuite {
   }
 
   ignore("smilodon alarm using spark conf") {
-    conf.set("spark.alarm.smilodon.users", "hzyaoqin@corp.netease.com")
+    conf.set("spark.alarm.smilodon.users", "yaooqinn@hotmail.com")
       .set("spark.alarm.smilodon.channels", "POPO,STONE")
 
     val msg = SmilodonAlertMessage(

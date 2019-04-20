@@ -21,7 +21,7 @@ class SentryAlarmist(conf: SparkConf) extends Alarmist {
   private val LOG = LogFactory.getFactory.getInstance(classOf[SentryAlarmist])
 
   private val client = HttpClients.createDefault()
-  private val url = conf.get(SENTRY_URL, "http://alarm.netease.com/api/send")
+  private val url = conf.get(SENTRY_URL, "")
   private val typ = conf.get(SENTRY_API_TYPE, SentryType.Stone.toString)
   private val api = url + typ
   private val to = conf.get(SENTRY_TO_LIST, "")

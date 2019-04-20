@@ -12,7 +12,7 @@ class SentryAlarmistTest extends FunSuite {
   ignore("sentry alarm") {
     conf.set(SENTRY_API_TYPE, "Stone")
       .set(SENTRY_APP_SECRET, "da1ce204-52aa-4d6a-835b-ea659dd2d0d3")
-      .set(SENTRY_TO_LIST, "hzyaoqin@corp.netease.com")
+      .set(SENTRY_TO_LIST, "yaooqinn@hotmail.com")
       .set(SENTRY_APP_NAME, "NeSparkLogAnalyzer")
     val alarmist = new SentryAlarmist(conf)
     val response = alarmist.alarm(message)

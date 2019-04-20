@@ -18,3 +18,4 @@ alarm-sentry/target/
 alarm-smilodon/target/
 /streaming-alarmer/streaming-alarmer.iml
 /streaming-alarmer/dependency-reduced-pom.xml
+/streaming-alarmer/target/

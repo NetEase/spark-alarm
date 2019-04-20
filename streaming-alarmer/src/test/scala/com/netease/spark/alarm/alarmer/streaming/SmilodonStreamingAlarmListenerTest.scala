@@ -9,7 +9,7 @@ class SmilodonStreamingAlarmListenerTest extends FunSuite {
   val conf: SparkConf = new SparkConf(loadDefaults = true)
     .setMaster("local[2]")
     .setAppName("smilodon")
-    .set("spark.alarm.smilodon.users", "hzyaoqin@corp.netease.com")
+    .set("spark.alarm.smilodon.users", "yaooqin@hotmail.com")
     .set("spark.alarm.smilodon.channels", "POPO,STONE")
 //    .set("spark.alarm.alarm.force.exit.on.stop", "true")
 
