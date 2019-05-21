@@ -100,6 +100,8 @@
                             <include>com.netease.spark:alarm-email</include>
                             <include>com.netease.spark:alarm-sentry</include>
                             <include>com.netease.spark:alarm-smilodon</include>
+                            <include>org.apache.commons:commons-email</include>
+                            <include>com.sun.mail:javax.mail</include>
                         </includes>
                     </artifactSet>
                 </configuration>
