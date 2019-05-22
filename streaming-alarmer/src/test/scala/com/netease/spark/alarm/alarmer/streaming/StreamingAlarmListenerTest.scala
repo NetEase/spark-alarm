@@ -3,32 +3,38 @@ package com.netease.spark.alarm.alarmer.streaming
 import org.scalatest.FunSuite
 
 import scala.reflect.runtime.{universe => ru}
-import scala.util.control.NonFatal
-import scala.util.{Failure, Try}
 
 class StreamingAlarmListenerTest extends FunSuite {
+  import StreamingAlarmListener._
+
   test("test get limit failure reason") {
     val className = "com.netease.spark.alarm.alarmer.streaming.StreamingAlarmListener"
-    val fieldName = "failureReasonLimit"
-    setStaticFieldValue(className, fieldName, 10)
-
+    val limitFieldName = "failureReasonLimit"
+    val factorFieldName = "maxLengthFactor"
+    val lengthLimit = 10
+    setStaticFieldValue(className, limitFieldName, lengthLimit)
     // length = 0
     val reason0 = ""
     // length < limit
+
     val reason1 = "Failed"
     // length > limit
     val reason2 = "Task Failed with Exception"
-    // length > limit with multi lines
-    val reason3 = "Task Failed with Exception\n\tjava.io.IOException"
+    // length > limit with multi lines not than lengthLimit * maxLengthFactor
+    val reason3 = "Task Failed with Exception\n\tline2"
 
-    assert(StreamingAlarmListener.getLimitFailureReason(reason0) === reason0)
-    assert(StreamingAlarmListener.getLimitFailureReason(reason1) === reason1)
-    assert(StreamingAlarmListener.getLimitFailureReason(reason2) === reason2)
-    assert(StreamingAlarmListener.getLimitFailureReason(reason3) === reason3.split("\n")(0))
+    setStaticFieldValue(className, factorFieldName, 10.0)
+    assert(getLimitedFailureReason(reason0) === reason0)
+    assert(getLimitedFailureReason(reason1) === reason1)
+    assert(getLimitedFailureReason(reason2) === reason2)
+    assert(getLimitedFailureReason(reason3) === reason3.split("\n")(0))
+
+    setStaticFieldValue(className, factorFieldName, 1.1)
+    assert(getLimitedFailureReason(reason2) === reason2.substring(0, (maxLengthFactor * failureReasonLimit).toInt))
   }
 
   def setStaticFieldValue(className: String, fieldName: String, value: Any): Unit = {
-    Try {
+    try {
       val mirror = ru.runtimeMirror(getClass.getClassLoader)
       val moduleSymbol = mirror.staticModule(className)
       val moduleMirror = mirror.reflectModule(moduleSymbol)
@@ -36,9 +42,8 @@ class StreamingAlarmListenerTest extends FunSuite {
       val limitField = moduleSymbol.typeSignature.decl(ru.TermName(fieldName))
       val limit = instanceMirror.reflectField(limitField.asTerm)
       limit.set(value)
-    } match {
-      case Failure(e) => e.printStackTrace()
-      case _ =>
+    } catch {
+      case e: Exception => e.printStackTrace()
     }
   }
 }
