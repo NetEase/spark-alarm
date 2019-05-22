@@ -9,13 +9,17 @@ import org.apache.commons.logging.LogFactory
 import org.apache.spark.SparkConf
 import org.apache.spark.scheduler.SparkListenerApplicationEnd
 import org.apache.spark.streaming.StreamingContext
-import org.apache.spark.streaming.scheduler.StreamingListenerBatchCompleted
+import org.apache.spark.streaming.scheduler.{StreamingListenerBatchCompleted, StreamingListenerBatchStarted, StreamingListenerOutputOperationCompleted}
+
+import scala.collection.JavaConverters._
 
 class SmilodonStreamingAlarmListener(override val conf: SparkConf) extends StreamingAlarmListener {
   private val LOG = LogFactory.getFactory.getInstance(classOf[SmilodonStreamingAlarmListener])
   override val alarmist: SmilodonAlarmist = new SmilodonAlarmist(conf)
 
   override def onApplicationEnd(applicationEnd: SparkListenerApplicationEnd): Unit = {
+    if (LOG.isDebugEnabled) LOG.debug(s"onApplicationEnd called: $applicationEnd")
+
     val maybeContext = StreamingContext.getActive()
     maybeContext.foreach { ssc =>
       val context = ssc.sparkContext
@@ -36,12 +40,32 @@ class SmilodonStreamingAlarmListener(override val conf: SparkConf) extends Strea
     }
   }
 
+  override def onBatchStarted(batchStarted: StreamingListenerBatchStarted): Unit = {
+    if (LOG.isDebugEnabled) LOG.debug(s"onBatchStarted called: $batchStarted")
+
+    if (batchNoticeEnable) {
+      val currentTime = System.currentTimeMillis()
+      batchSet.entrySet().asScala.foreach { kv =>
+        val start = kv.getValue
+        if (currentTime - start > batchProcessThreshold) {
+          val content = batchTimeoutContent(currentTime - start)
+          val event = SmilodonEvent.streamingBatchEvent()
+          val alertMessage = SmilodonAlertMessage(SmilodonAlertLevel.FATAL, event, STREAMING_BATCH_ERROR, content, conf)
+          alarmist.alarm(alertMessage)
+        }
+      }
+      val batchInfo = batchStarted.batchInfo
+      batchSet.put(batchInfo.batchTime, batchInfo.processingStartTime.getOrElse(System.currentTimeMillis()))
+    }
+  }
+
   override def onBatchCompleted(batchCompleted: StreamingListenerBatchCompleted): Unit = {
     if (LOG.isDebugEnabled) LOG.debug(s"onBatchCompleted called: $batchCompleted")
 
     val info = batchCompleted.batchInfo
 
     if (batchNoticeEnable) {
+      batchSet.remove(info.batchTime)
       val batchFailureReasons = info.outputOperationInfos.values.map(_.failureReason).filter(_.nonEmpty).mkString("\n")
       if (batchFailureReasons.nonEmpty) {
         val content = batchErrorContent(batchFailureReasons)
@@ -61,4 +85,17 @@ class SmilodonStreamingAlarmListener(override val conf: SparkConf) extends Strea
     }
   }
 
+  override def onOutputOperationCompleted(outputOperationCompleted: StreamingListenerOutputOperationCompleted): Unit = {
+    if (LOG.isDebugEnabled) LOG.debug(s"onOutputOperationCompleted called: $outputOperationCompleted")
+
+    if (jobNoticeEnable) {
+      val jobFailureReason = outputOperationCompleted.outputOperationInfo.failureReason
+      jobFailureReason.foreach { reason =>
+        val content = jobErrorContent(reason)
+        val event = SmilodonEvent.streamingJobEvent()
+        val alertMessage = SmilodonAlertMessage(SmilodonAlertLevel.FATAL, event, STREAMING_JOB_ERROR, content, conf)
+        alarmist.alarm(alertMessage)
+      }
+    }
+  }
 }

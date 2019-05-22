@@ -7,5 +7,6 @@ package object streaming {
   val BATCH_NOTICE_ENABLE: String = PREFIX + "batch.error.enable"
   val BATCH_DELAY_RATIO: String = PREFIX + "batch.delay.ratio"
   val BATCH_PROCESS_TIME: String = PREFIX + "batch.process.time.threshold"
+  val JOB_NOTICE_ENABLE: String = PREFIX + "job.error.enable"
 
 }

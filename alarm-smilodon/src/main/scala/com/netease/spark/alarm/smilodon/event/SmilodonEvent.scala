@@ -17,4 +17,6 @@ object SmilodonEvent {
   def streamingBatchEvent(): SmilodonEvent =
     SmilodonEvent(AlarmConstants.SERVICE, Components.STREAMING.toString, AlertType.Batch.toString)
 
+  def streamingJobEvent(): SmilodonEvent =
+    SmilodonEvent(AlarmConstants.SERVICE, Components.STREAMING.toString, AlertType.Job.toString)
 }

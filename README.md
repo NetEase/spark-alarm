@@ -79,6 +79,7 @@ git https://github.com/yaooqinn/spark-alarm.git
 | ------ | ------ | ------ |
 | spark.alarm.streaming.application.force.exit | false | 出现Application级别错误的时候，是否直接exit |
 | spark.alarm.streaming.batch.error.enable | true | 是否对Batch出错的信息进行告警 |
+| spark.alarm.streaming.job.error.enable | false | 是否对job出错的信息进行告警 |
 | spark.alarm.streaming.batch.delay.ratio | 1 | Schedule delay时间 / Processing 时间的比值，大于该值，则作为判定为需要告警的必要条件之一  |
 | spark.alarm.streaming.batch.process.time.threshold | 1s | 处理时间的阈值，实际处理时间大于该值的批次，才进行报警 |
 
