@@ -160,7 +160,7 @@ trait StreamingAlarmListener extends SparkListener with StreamingListener {
        |作业ID: $applicationId
        |诊断信息:
        |  (长度限制: $failureReasonLimit)
-       |  ${getLimitFailureReason(batchFailureReasons)}
+       |  ${getLimitedFailureReason(batchFailureReasons)}
        |  单独关闭该类型警报可设置$BATCH_NOTICE_ENABLE=false
      """.stripMargin
   }
@@ -185,7 +185,7 @@ trait StreamingAlarmListener extends SparkListener with StreamingListener {
        |作业ID: $applicationId
        |诊断信息:
        |  (长度限制: $failureReasonLimit)
-       |  ${getLimitFailureReason(jobErrorReason)}
+       |  ${getLimitedFailureReason(jobErrorReason)}
        |  单独关闭该类型警报可设置$JOB_NOTICE_ENABLE=false
      """.stripMargin
   }
@@ -205,16 +205,18 @@ trait StreamingAlarmListener extends SparkListener with StreamingListener {
      """.stripMargin
   }
 }
+
 object StreamingAlarmListener {
   // The length limit for failureReason to sent
   val failureReasonLimit: Int = 200
+  val maxLengthFactor: Double = 1.5
 
-  def getLimitFailureReason(failureReason: String): String = {
+  def getLimitedFailureReason(failureReason: String): String = {
     val nextLineIndex = failureReason.indexOf("\n", failureReasonLimit)
     if (nextLineIndex == -1) {
-      failureReason
+      failureReason.substring(0, math.min(failureReason.length, (failureReasonLimit * maxLengthFactor).toInt))
     } else {
-      failureReason.substring(0, nextLineIndex)
+      failureReason.substring(0, math.min(nextLineIndex, (failureReasonLimit * maxLengthFactor).toInt))
     }
   }
 }
