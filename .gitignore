@@ -1,0 +1,21 @@
+# Created by .ignore support plugin (hsz.mobi)
+/alarm-common/alarm-common.iml
+/spark-alarm.iml
+/alarm-email/alarm-email.iml
+/alarm-sentry/alarm-sentry.iml
+/alarm-smilodon/alarm-smilodon.iml
+/.idea/
+.idea/dictionaries/
+.idea/encodings.xml
+.idea/misc.xml
+.idea/sbt.xml
+.idea/thriftCompiler.xml
+.idea/vcs.xml
+.idea/workspace.xml
+alarm-common/target/
+alarm-email/target/
+alarm-sentry/target/
+alarm-smilodon/target/
+/streaming-alarmer/streaming-alarmer.iml
+/streaming-alarmer/dependency-reduced-pom.xml
+/streaming-alarmer/target/
