@@ -22,7 +22,7 @@
         <fastjson.ver>1.2.49</fastjson.ver>
         <scala.bin.ver>2.11</scala.bin.ver>
         <scala.ver>2.11.8</scala.ver>
-        <spark.ver>2.1.2</spark.ver>
+        <spark.ver>2.4.7</spark.ver>
     </properties>
 
     <dependencyManagement>
